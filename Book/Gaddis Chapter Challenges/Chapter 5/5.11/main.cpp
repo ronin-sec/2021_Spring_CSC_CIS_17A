@@ -15,7 +15,7 @@ using namespace std;
 int main()
 {
     //Variables
-    double oldFee = 3000, 
+    float oldFee = 3000, 
            increase,
            newFee = oldFee + increase,
            temp;
