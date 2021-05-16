@@ -24,29 +24,29 @@ constexpr auto NEW_LINE = char(0x0a); //new line char
 constexpr auto SPACE = char(0x20); //Space
 
 //Function Prototypes
-char** makeBoard_V2(int, int,Piece [],Piece[]); //Generates board using 2d array, pieces and board
-void prntBoard_V2(char**, int, int);			//Print board
-void writeLetters(char**, Piece [], Piece []);	//Write letters to board array
-void writePatterns(char**);						//Write black and white to board array
-void destroy(char**, int);						//Unallocate memory
-void writePiece_v2(char**, Piece[]);			//Redesigned write Piece function
-Ply getPly(string);								//PLayer turn information, used for the movePiece function
-int processLetter(char);						//Used for conversion of user input into board coordinates
-int processNum(int);							//Used for conversion of user input into board coordinates
-void turnCheck(int&, string&);					//Check turnCount variable to see who's turn it is
-void movePiece(Ply, Piece[], Piece[]);			//Move piece using ply data
-void clearScreen();								//Outputs a bunch of newlines to shows the new board
-string idPiece(Ply, Piece[], int&);				//Identifies pieces by name, using position coordinates (used by legalM)
-bool legalM(Ply , Piece [], Piece []);			//returns bool to indicate move legality (uses functions below)
-bool pwnLogic(Ply,Piece[],Piece[],int);			//Checks that move is legal for pawns
-bool knightLogic(Ply,Piece[],Piece[],int);		//Checks that move is legal for knights
-bool bishopLogic(Ply,Piece[],Piece[],int);		//Checks that move is legal for bishops
-bool towerLogic(Ply,Piece[],Piece[],int);		//Checks that move is legal for tower
-bool queenLogic(Ply,Piece[],Piece[],int);		//Checks that move is legal for queen pieces 
-bool kingLogic(Ply,Piece[],Piece[],int);		//Checks that move is legal for king pieces 
-bool checkIn(char, int);						//Validates user input during getPLy function
-//void capture(Ply,Piece[],Piece[]);			//sets the captured value for a piece when needed
-bool obstructd(Ply,Piece[],Piece[],int); 		//Check for obstructing pieces in a move
+char** makeBoard_V2(int, int,Piece [],Piece[]);     //Generates board using 2d array, pieces and board
+void prntBoard_V2(char**, int, int);                //Print board
+void writeLetters(char**, Piece [], Piece []);      //Write letters to board array
+void writePatterns(char**);                         //Write black and white board squares to board array ^
+void destroy(char**, int);                          //Unallocate memory
+void writePiece_v2(char**, Piece[]);                //Redesigned write Piece function, modifies values of piece arrays
+Ply getPly(string);                                 //Player turn information, used for the movePiece function
+int processLetter(char);                            //Used for conversion of user input into board coordinates
+int processNum(int);                                //Used for conversion of user input into board coordinates
+void turnCheck(int&, string&);                      //Check turnCount variable to see who's turn it is
+void movePiece(Ply, Piece[], Piece[]);              //Move piece using ply data
+void clearScreen();                                 //Outputs a bunch of newlines to shows the new board
+string idPiece(Ply, Piece[], int&);                 //Identifies piece by name, using position coordinates (used by legalM)
+bool legalM(Ply , Piece [], Piece []);              //returns bool to indicate move legality (uses functions below)
+bool pwnLogic(Ply,Piece[],Piece[],int);		    //Checks that move is legal for pawns
+bool knightLogic(Ply,Piece[],Piece[],int);          //Checks that move is legal for knights
+bool bishopLogic(Ply,Piece[],Piece[],int);          //Checks that move is legal for bishops
+bool towerLogic(Ply,Piece[],Piece[],int);           //Checks that move is legal for tower
+bool queenLogic(Ply,Piece[],Piece[],int);           //Checks that move is legal for queen pieces 
+bool kingLogic(Ply,Piece[],Piece[],int);            //Checks that move is legal for king pieces 
+bool checkIn(char, int);                            //Validates user input during getPLy function
+//void capture(Ply,Piece[],Piece[]);                //sets the captured value for a piece when needed
+bool obstructd(Ply,Piece[],Piece[],int);            //Check for obstructing pieces in a move
 
 //-----------------------------------------MAIN--------------------------------
 int main()
@@ -156,8 +156,7 @@ int main()
 }
 //---------------------------------end of MAIN---------------------------------
 
-//Creates the initial board and the new version of it as the game is played,
-//it is called at the beginning of the do-while loop in the main function 
+
 char** makeBoard_V2(int boardWidth, int boardHeight, Piece whitArr[], Piece blckArr[]) {
 	//Create 2d pointer arr with board width and height
 	char** boardPtr = nullptr;
@@ -280,24 +279,21 @@ void writePatterns(char** boardPtr) {
 	}
 }
 
-//This function calls writePiece_v2 for both color piece arrays and modifies board
-//with that information
 void writeLetters(char** boardPtr, Piece whitArr[], Piece blckArr[]){
+	//declare struct arr of black pieces
 	
-        //write/update pieces of black piece array
+		
 	writePiece_v2(boardPtr, blckArr);
-        //write/update pieces of white piece array
 	writePiece_v2(boardPtr, whitArr);
 }
 
-//Used to update an array of piece structures 
 void writePiece_v2(char** boardPtr, Piece colorArr[]) {
 	//there are 16 pieces of each color 
-        int numPcs = 16;
-    
+	
 	//iterate color array to write each piece on the board based on its members 
-	//we use the bool "captured" to decide wether to print it or not
-	for (int i = 0; i < numPcs; i++) {
+	//we use the bool captured to decide wether to print it or not
+
+	for (int i = 0; i < 16; i++) {
 		string iLetters = colorArr[i].letters;
 		for (int j = 0, row = colorArr[i].row, col = colorArr[i].col; j < 2; j++, col++) {
 			if(colorArr[i].captured == true){
@@ -505,6 +501,7 @@ void clearScreen(){
 };
 
 
+//This function is used by legalM 
 string idPiece(Ply move, Piece colorArr[], int &pIndex){
 	string pieceID = " ";
 	
@@ -1135,8 +1132,11 @@ bool checkIn(char letter, int number){
 }
 
 
+// Capture function
+// removes the piece from board if it has been captured
+
 // Checks that the square you move to is not occupied by a piece of the same color.
-// If it is occupied by piece of different color, then the piece is captured. 
+// If it is occupied by piece of different colored, then the piece is captured. 
 bool obstructd(Ply move, Piece whitArr[], Piece blckArr[], int pIndex){
 	bool obstructed = false; 
 
