@@ -1,21 +1,21 @@
 #ifndef PIECES_H
 #define PIECES_H
 
-//Stores information used to display pieces
+//structure stores piece information contained in member vars below 
 struct Piece {
-    string name;
-    string letters;
-    int value;
-    bool captured;
-    int row;
-    int col;
-    string color;
-    bool firstT;
+    string name;        //"Pawn", etc..    
+    string letters;     //"bP", means black pawn, etc.. 
+    int value;          //numerical value assigned for AI choice making
+    bool captured;      //if captured, piece is no longer on the field. 
+    int row;            //row position of piece in it's corresponding array
+    int col;            //column position of piece inn it's corresponding array
+    string color;       //-----unsure what this is for yet--------not used in current version (4.3)
+    bool firstT;        //check if this is piece's first turn, used for pawns only, currently 
 };
 
-//Stores information used to move pieces
+//Structure storing move information contained in member variables seen below 
 struct Ply {
-    string player; //Player color
+    string player; //Player color, "white" or "black"
     int pRow;    //Current position row coordinate
     int pCol;    //Current position column coordinate 
     int dRow;    //Destination row coordinate
