@@ -22,6 +22,7 @@ file.
 #include <fstream>
 #include <iostream>
 #include <cctype>
+#include <string>
 
 using namespace std;
 
@@ -32,7 +33,7 @@ int main(int argc, char** argv) {
             lineTxt;   //Holds line contents
     
     char keyPress; //Holds key press 
-    long int readPos, writPos; //used to store read and write positions 
+    int readPos, writPos; //used to store read and write positions 
     
     
     //Get files names from user 
@@ -57,13 +58,13 @@ int main(int argc, char** argv) {
     inpFile.clear(); //clear all error flags that may be found in input file
     inpFile.seekg(0, ios::beg); //set read pos to first byte of file
     outFile.seekp(0, ios::beg); //set write pos to first byte of file
-    readPos = inpFile.tellg();  //set read position value
+    readPos = inpFile.tellg();  
     
     while(!inpFile.fail()){
         
         writPos = inpFile.tellg();
         getline(inpFile, lineTxt); 
-        for (int i = 0; i < lineTxt; i++){
+        for (int i = 0; i < lineTxt.length(); i++){
             if(readPos == writPos){
                 
                 if(isalpha(lineTxt[0])){
@@ -72,21 +73,28 @@ int main(int argc, char** argv) {
                 if(isspace(lineTxt[0])){
                     lineTxt[1] = toupper(lineTxt[1]);
                 }
-            }else if(lineTxt[i]) == '.'){
-                if(isalpha(lineTxt[0])){
+            }
+            else if(lineTxt[i] == '.')
+            {
+                
+                if(isalpha(lineTxt[i]))
+                {
                     lineTxt[i] = toupper(lineTxt[i]);
                 }
-                if (isspace(lineTxt[i+1])){
+                if (isspace(lineTxt[i+1]))
+                {
                     lineTxt[i + 2] = toupper(lineTxt[i + 2]);
                     i += 2;
                 }
-            }else{
-                lineTxt[i] = tolower(lineTxt[i]);
             }
+            else
+            
+                lineTxt[i] = tolower(lineTxt[i]);
+            
                 
         }
         
-        outFile << lineTxt;
+        outFile << lineTxt << endl;
         
     }
     

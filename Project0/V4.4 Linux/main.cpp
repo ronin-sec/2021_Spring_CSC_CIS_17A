@@ -143,6 +143,17 @@ int main()
 		//"move" the piece by updating it's coordinate values in struct array
 		movePiece(moveData, blackArr, whiteArr);
 		
+                /*
+                //Loop to test the value of all captured members in structure array
+                for(int i = 0; i < 16; i++) {
+                    if(blackArr[i].captured == true){ //change to whiteArr if needed
+                        cout << "Piece #" << i << " = True" << endl;
+                    }else{
+                        cout << "Piece #" << i << " = False" << endl;
+                    }
+                }
+                */
+                
 		//writePieceV2 needs to check the boolean value in each piece to see if it will be printed
 		// if the piece is "captured", it gets replaced with an empty space 
 		clearScreen();
@@ -292,17 +303,28 @@ void writeLetters(char** boardPtr, Piece whitArr[], Piece blckArr[]){
 
 //Used in writeLetters 
 void writePiece_v2(char** boardPtr, Piece colorArr[]) {
-	//there are 16 pieces of each color 
-	
-	//iterate color array to write each piece on the board based on its members 
-	for (int i = 0; i < 16; i++) {
-		string iLetters = colorArr[i].letters;
-		for (int j = 0, row = colorArr[i].row, col = colorArr[i].col; j < 2; j++, col++) {
-                    
-                    *(*(boardPtr + row) + col) = iLetters[j];						
-                    
-		}
-	}
+
+    char emptySquare[]= "   ";
+    
+    //there are 16 pieces of each color 
+    //iterate color array to write each piece on the board based on its members 
+    for (int i = 0; i < 16; i++) {
+            string iLetters = colorArr[i].letters;
+            if(colorArr[i].captured == false){
+
+                for (int j = 0, row = colorArr[i].row, col = colorArr[i].col; j < 2; j++, col++) {                    
+                    *(*(boardPtr + row) + col) = iLetters[j];						                    
+                }
+
+            }else{
+
+                for (int j = 0, row = colorArr[i].row, col = colorArr[i].col; j < 2; j++, col++) {                    
+                    *(*(boardPtr + row) + col) = emptySquare[j];
+                }
+
+            }
+
+    }
 }
 
 
@@ -1201,7 +1223,7 @@ void capture(Ply move, Piece whitArr[], Piece blckArr[], int pIndex){
                     *pDataBl = blckArr[i];   //this is the iterated piece (BLACK)
        
                     if((move.dRow == pDataBl->row) && (move.dCol == pDataBl->col)){
-                        pDataBl->captured = true; 
+                        blckArr[i].captured = true; 
                     }
             } 
     }
@@ -1213,10 +1235,11 @@ void capture(Ply move, Piece whitArr[], Piece blckArr[], int pIndex){
                     *pDataWh = whitArr[i];   //this is the iterated piece (BLACK)
        
                     if((move.dRow == pDataWh->row) && (move.dCol == pDataWh->col)){
-                        pDataWh->captured = true; 
+                        whitArr[i].captured = true; 
                     }
             } 
     }
+    
     
     delete pDataBl, pDataM, pDataWh; //free the mem used for the 3 piece pointers created above
     
