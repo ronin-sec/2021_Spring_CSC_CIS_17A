@@ -10,7 +10,6 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <vector>
 
 using namespace std;
 
@@ -48,16 +47,14 @@ bool kingLogic(Ply,Piece[],Piece[],int);            //Checks that move is legal 
 bool checkIn(char, int);                            //Validates user input during getPLy function
 bool obstructd(Ply,Piece[],Piece[],int);            //Check for obstructing pieces in a move
 void capture  (Ply,Piece[],Piece[],int);            //sets the captured value for a piece when needed
-void displayCaps(Ply, Piece[], Piece[],int);
 
-
-//-----------------------------------------MAIN---------------------------------
+//-----------------------------------------MAIN--------------------------------
 int main()
 {
 
 	//Variables for board size:
 	const int BW = 70;	//Board Width
-	const int BH = 30;	//Board Height
+	const int BH = 40;	//Board Height
 
 	//create 2d board arr
 	char** board = nullptr;
@@ -128,16 +125,14 @@ int main()
 		turnCheck(turnCount, player);
 
 		if(player == "white"){
-			cout << "White's Turn. \n";                
+			cout << "White's Turn. \n";
 		}else{
 			cout << "Black's Turn: \n";
 		}
 
-                //display current capture information if applicable
-                displayCaps(moveData, whiteArr, blackArr, turnCount);
-                
 		//get the corresponding ply data
-		moveData = getPly(player);                             
+		moveData = getPly(player);
+
 
 		//check if move is legal
 		while(legalM(moveData, whiteArr, blackArr) != true){
@@ -207,13 +202,13 @@ char** makeBoard_V2(int boardWidth, int boardHeight, Piece whitArr[], Piece blck
         
 	for (int col = 0; col < boardWidth; col++)
 	{
-		*(*(boardPtr + 1) + col) = letterIndex[col];
-		*(*(boardPtr + 28) + col) = letterIndex[col];
+		*(*(boardPtr + 6) + col) = letterIndex[col];
+		*(*(boardPtr + 33) + col) = letterIndex[col];
 	}
 	
 	//Add numerical index left and right of board
 	char numIndex = '8';
-	for (int row = 4 ; row < 27; row+=3, numIndex--)
+	for (int row = 9 ; row < 32; row+=3, numIndex--)
 	{
 		int leftCol = 3,
 			rightCol = 66;
@@ -224,8 +219,8 @@ char** makeBoard_V2(int boardWidth, int boardHeight, Piece whitArr[], Piece blck
 	writePatterns(boardPtr);
 	writeLetters(boardPtr, whitArr, blckArr);
         
-        /*Testing captured piece information display, does not work... 
-        //Strins to hold the captured pieces if/when applicable
+        /*
+        //Strings to hold the captured pieces if/when applicable
         string wText = "White Captures: ";
         string bText = "Black Captures: ";
         string whteCaps = " ";
@@ -245,15 +240,11 @@ char** makeBoard_V2(int boardWidth, int boardHeight, Piece whitArr[], Piece blck
                 continue; 
             }
         }
-        
         */
         
 
 	return boardPtr;
 }
-//-----------------------------END---of----MAIN---------------------------------
-
-//-----------FUNCTION-------------DEFINITIONS-----------------------------------
 
 //Checkered pattern on board is created via this function
 void writePatterns(char** boardPtr) {
@@ -297,30 +288,30 @@ void writePatterns(char** boardPtr) {
 	//Write the patterns to array, creating board 
 	for (int col = 7, i = 0; col < 63; col++, i++)
 	{
-		*(*(boardPtr + 3) + col) = patternA[i];
-		*(*(boardPtr + 4) + col) = patternA_S[i];
-		*(*(boardPtr + 5) + col) = patternA[i];
-		*(*(boardPtr + 6) + col) = patternB[i];
-		*(*(boardPtr + 7) + col) = patternB_S[i];
-		*(*(boardPtr + 8) + col) = patternB[i];
-		*(*(boardPtr + 9) + col) = patternA[i];
-		*(*(boardPtr + 10) + col) = patternA_S[i];
-		*(*(boardPtr + 11) + col) = patternA[i];
-		*(*(boardPtr + 12) + col) = patternB[i];
-		*(*(boardPtr + 13) + col) = patternB_S[i];
-		*(*(boardPtr + 14) + col) = patternB[i];
-		*(*(boardPtr + 15) + col) = patternA[i];
-		*(*(boardPtr + 16) + col) = patternA_S[i];
-		*(*(boardPtr + 17) + col) = patternA[i];
-		*(*(boardPtr + 18) + col) = patternB[i];
-		*(*(boardPtr + 19) + col) = patternB_S[i];
-		*(*(boardPtr + 20) + col) = patternB[i];
-		*(*(boardPtr + 21) + col) = patternA[i];
-		*(*(boardPtr + 22) + col) = patternA_S[i];
-		*(*(boardPtr + 23) + col) = patternA[i];
-		*(*(boardPtr + 24) + col) = patternB[i];
-		*(*(boardPtr + 25) + col) = patternB_S[i];
-		*(*(boardPtr + 26) + col) = patternB[i];
+		*(*(boardPtr + 8) + col) = patternA[i];
+		*(*(boardPtr + 9) + col) = patternA_S[i];
+		*(*(boardPtr + 10) + col) = patternA[i];
+		*(*(boardPtr + 11) + col) = patternB[i];
+		*(*(boardPtr + 12) + col) = patternB_S[i];
+		*(*(boardPtr + 13) + col) = patternB[i];
+		*(*(boardPtr + 14) + col) = patternA[i];
+		*(*(boardPtr + 15) + col) = patternA_S[i];
+		*(*(boardPtr + 16) + col) = patternA[i];
+		*(*(boardPtr + 17) + col) = patternB[i];
+		*(*(boardPtr + 18) + col) = patternB_S[i];
+		*(*(boardPtr + 19) + col) = patternB[i];
+		*(*(boardPtr + 20) + col) = patternA[i];
+		*(*(boardPtr + 21) + col) = patternA_S[i];
+		*(*(boardPtr + 22) + col) = patternA[i];
+		*(*(boardPtr + 23) + col) = patternB[i];
+		*(*(boardPtr + 24) + col) = patternB_S[i];
+		*(*(boardPtr + 25) + col) = patternB[i];
+		*(*(boardPtr + 26) + col) = patternA[i];
+		*(*(boardPtr + 27) + col) = patternA_S[i];
+		*(*(boardPtr + 28) + col) = patternA[i];
+		*(*(boardPtr + 29) + col) = patternB[i];
+		*(*(boardPtr + 30) + col) = patternB_S[i];
+		*(*(boardPtr + 31) + col) = patternB[i];
 	}
 }
 
@@ -359,9 +350,10 @@ void writePiece_v2(char** boardPtr, Piece colorArr[]) {
     }
 }
 
-//Prints the board, used for initial print and following updates. 
+
+
 void prntBoard_V2(char** boardPtr, int boardW, int boardH) {
-	for (int i = 0; i < boardH; i++) {
+	for (int i = 0+5; i < boardH-5; i++) {
 		for (int j = 0; j < boardW; j++) {
 			if (j == boardW - 1) {
 				cout << *(*(boardPtr + i) + j);
@@ -376,14 +368,13 @@ void prntBoard_V2(char** boardPtr, int boardW, int boardH) {
 	}
 }
 
-//Used to destroy the board (frees the memory used)
 void destroy(char** boardPtr, int rows) {
 	for (int i = 0; i < rows; i++) {
 		delete[] boardPtr[i];
 	}
 }
 
-//Used to store a player's move information aka "Ply"
+
 Ply getPly(string player){
 	Ply input;
 	
@@ -398,7 +389,7 @@ Ply getPly(string player){
 	char dLetter = ' '; //input from destination letter
 	int  dNum = 0;		//input from destination row
 	
-	cout << "\n\n You must enter location of the piece you'd like to move,\n"
+	cout << "You must enter location of the piece you'd like to move,\n"
 			<< "then the location you'd like to move it to... \n\n";
 	
 	cout << "What piece do you want to move(e.x.: A 8): ";
@@ -447,7 +438,6 @@ Ply getPly(string player){
 	
 }
 
-//Player input processing, needed to turn the player coords into array coords 
 int processLetter(char letter){
 	int column;
 
@@ -474,7 +464,7 @@ int processLetter(char letter){
 	return column;
 }
 
-//Player input processing, needed to turn the player coords into array coords 
+
 int processNum(int inRow){
 	int row = 0;
 
@@ -501,7 +491,6 @@ int processNum(int inRow){
 	return row;
 }
 
-//Used to establish player turn in the main function. 
 void turnCheck(int &turnCount, string &player){
 	string w = "white", 
 		   b = "black";
@@ -548,7 +537,6 @@ void movePiece (Ply move, Piece blckArr[], Piece whitArr[]){
 	}
 }
 
-//"clears" screen for updated board to be displayed
 void clearScreen(){
 	for(int i = 0; i < 50; i++){
 		cout << endl;
@@ -574,9 +562,7 @@ string idPiece(Ply move, Piece colorArr[], int &pIndex){
 	return pieceID;
 }
 
-//Analysis of the Ply structure which contains player move information done here 
-//Returns boolean that indicates the "legality" of the move
-//Modifies pIndex by reference. 
+
 bool legalM(Ply move, Piece whitArr[], Piece blckArr[]){
 	bool legal; 				//Will store legality of move
 	string pieceName = " ";                 //Stores the name of the piece (e.x. Pawn, Queen, etc)
@@ -1196,6 +1182,7 @@ bool checkIn(char letter, int number){
 	return valid;
 }
 
+
 // Checks that the square you move to is not occupied by a piece of the same color.
 bool obstructd(Ply move, Piece whitArr[], Piece blckArr[], int pIndex){
     bool obstructed = false; 
@@ -1240,6 +1227,7 @@ bool obstructd(Ply move, Piece whitArr[], Piece blckArr[], int pIndex){
     return obstructed; //true if obstruction exists, false if it doesn't 
 }
 
+
 //Capture function, should be called after obstruction check 
 //Similar to the obstructed function, it checks for pieces that are located 
 //at the destination coordinates, but it checks for pieces that are the adversary color
@@ -1253,129 +1241,30 @@ void capture(Ply move, Piece whitArr[], Piece blckArr[], int pIndex){
 
     //does the capture check for white pieces
     if(move.player == "white"){
-            *pDataM = whitArr[pIndex];	//this is the moving piece (White)
+            *pDataM = whitArr[pIndex];	//this is the moving piece (WHITE)
             for(int i = 0; i < 16; i++){
-                    *pDataBl = blckArr[i];   //this is the iterated piece (Black)
+                    *pDataBl = blckArr[i];   //this is the iterated piece (BLACK)
        
                     if((move.dRow == pDataBl->row) && (move.dCol == pDataBl->col)){
-                        blckArr[i].captured = true; //capture status modified 
+                        blckArr[i].captured = true; 
                     }
             } 
     }
 
     //does the capture check for black pieces
     if(move.player == "black"){
-            *pDataM = blckArr[pIndex];	//this is the moving piece (Black)
+            *pDataM = blckArr[pIndex];	//this is the moving piece (WHITE)
             for(int i = 0; i < 16; i++){
-                    *pDataWh = whitArr[i];   //this is the iterated piece (White)
+                    *pDataWh = whitArr[i];   //this is the iterated piece (BLACK)
        
                     if((move.dRow == pDataWh->row) && (move.dCol == pDataWh->col)){
-                        whitArr[i].captured = true; //capture status modified 
+                        whitArr[i].captured = true; 
                     }
             } 
     }
     
     
     delete pDataBl, pDataM, pDataWh; //free the mem used for the 3 piece pointers created above
-    
-    return;
-}
-
-//Display pieces that player has lost and those they have captured
-//Used within do-while loop in Main function
-void displayCaps(Ply move, Piece whitArr[], Piece blckArr[], int turnCount){
-    
-    //Check both Piece arrays to see if any pieces have been captured
-    
-    
-    bool whiteHasCaps = false;
-    bool whiteHasLosses = false; 
-    bool blackHasCaps = false;
-    bool blackHasLosses = false; 
-    
-    for(int i = 0; i < 16; i++){
-        if(whitArr[i].captured){
-            whiteHasCaps = true; 
-        }
-        if(blckArr[i].captured){
-            blackHasCaps = true; 
-        }
-    }
-    
-    
-    
-    Piece * pDataWh =  new Piece; 	//Store information of white piece iterated 
-    Piece * pDataBl =  new Piece; 	//Store information of black piece iterated     
-    
-    vector<string> whiteCaps {};
-    vector<string> blackCaps {};
-    string capdTxt = "You have captured the following pieces: ";\
-    string lostTxt = "You have lost the following pieces: ";
-    
-    if(blackHasCaps == true || whiteHasCaps == true){
-        
-        //does the capture check for white pieces
-        if(move.player == "black"){
-
-            //If white player's turn, get capture information
-            for(int i =0 ; i < 16 ; i++){
-                
-                *pDataBl = blckArr[i];   //this is the iterated piece (Black)
-                *pDataWh = whitArr[i];	//this is the moving piece (White)
-                
-                if(blckArr[i].captured == true){                 
-                    whiteCaps.push_back(pDataBl->letters); //White has captured these
-                }
-                if(whitArr[i].captured == true){                
-                    blackCaps.push_back(pDataWh->letters);// And lost these
-                }
-            }
-            //Display capture information
-            cout << capdTxt << endl; //"You have captured the following pieces: "
-            for(int i = 0; i < whiteCaps.size(); i++){
-                cout << whiteCaps[i] << ", ";
-            }
-            cout << lostTxt << endl; //"You have lost the following pieces: "
-            for(int i = 0; i < blackCaps.size(); i++){
-                cout << blackCaps[i] << ", ";
-            }
-
-        }
-
-        //does the capture check for black pieces
-
-        // need to make sure that either string is only displayed when there are 
-        // elements inside the vector... read size using if, then print if applicable
-        if(move.player == "white"){
-                //If black player's turn, get capture information
-            for(int i =0 ; i < 16 ; i++){
-                
-                *pDataBl = blckArr[i];   //this is the iterated piece (Black)
-                *pDataWh = whitArr[i];	//this is the moving piece (White)
-                
-                if(whitArr[i].captured == true){                    
-                    whiteCaps.push_back(pDataWh->letters); //Black has captured these
-                }
-                if(blckArr[i].captured == true){                  
-                    blackCaps.push_back(pDataBl->letters);//and lost these 
-                }
-            }
-            //Display capture information
-            cout << endl << capdTxt ; //"You have captured the following pieces: "
-            for(int i = 0; i < blackCaps.size(); i++){
-                cout << whiteCaps[i] << ", ";
-            }
-            
-            cout << endl << lostTxt ; //"You have lost the following pieces: "
-            for(int i = 0; i < whiteCaps.size(); i++){
-                cout << blackCaps[i]  << ", ";
-            }
-
-        }
-        
-    }
-    
-    delete pDataBl, pDataWh; //free the mem used for the 3 piece pointers created above
     
     return;
 }
