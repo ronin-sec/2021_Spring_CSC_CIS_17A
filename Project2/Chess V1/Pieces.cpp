@@ -1,15 +1,16 @@
-//Implementation of the Piece class
+//Implementation of the Piece class, contains the definition of all
+//class functions/methods.
 #include "Pieces.h"
 #include <iostream>
 #include <cstdlib>
 #include <string>
-using namespace std; 
+using namespace std;
 
 //**************************************************************
 // Constructors for the Piece class.                           *
 //**************************************************************
 
-//Default Constructor, creates Piece with member variable values that are 
+//Default Constructor, creates Piece with member variable values that are
 //meat to be replaced with proper values
 Piece::Piece(){
     name = "";
@@ -22,7 +23,7 @@ Piece::Piece(){
     firstT = false;
 }
 
-//Parameterized Constructor of this feller, creates a Piece object with the 
+//Parameterized Constructor of this feller, creates a Piece object with the
 //specified member variable values
 Piece::Piece(string n, string l, int v, bool cap, int r, int c, string colr, bool fT){
     n = name;
@@ -47,28 +48,28 @@ void Piece::setName(string na){
 void Piece::setLetters(string let){
     let = letters;
 }
-       
-//Set value 
+
+//Set value
 void Piece::setVal(int val){
     val = value;
 }
 
-//Set captured 
+//Set captured
 void Piece::setCap(bool cap){
     cap = captured;
 }
 
-//Set coordinates 
+//Set coordinates
 void Piece::setCoords(int r, int c){
     r  = row;
     c = col;
 }
-       
-//Set color 
+
+//Set color
 void Piece::setColor(string c){
-    c = color; 
+    c = color;
 }
-        
+
 void Piece::setFT(bool cap){
     cap = captured;
 }
@@ -82,7 +83,7 @@ string Piece::getName() const{
     return name;
 }
 
-//Get letters 
+//Get letters
 string Piece::getLetters() const{
     return letters;
 }
@@ -107,12 +108,12 @@ int Piece::getCol() const{
     return col;
 }
 
-//Get color 
+//Get color
 string Piece::getColor() const{
     return color;
 }
 
-//Get first turn status 
+//Get first turn status
 bool Piece::getFT() const{
     return firstT;
 }
