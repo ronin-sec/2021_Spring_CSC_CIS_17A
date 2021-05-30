@@ -346,20 +346,23 @@ void writePiece_v2(char** boardPtr, Piece colorArr[]) {
     //iterate color array to write each piece on the board based on its members 
     for (int i = 0; i < 16; i++) {
             string iLetters = colorArr[i].getLetters();
+            
             if(colorArr[i].getCap() == false){ //If piece has not been  captured, write to board normally 
 
-                for (int j = 0, row = colorArr[i].getRow(), col = colorArr[i].getCol(); j < 2; j++, col++) {                    
+                for (int j = 0, row = colorArr[i].getRow(), col = colorArr[i].getCol(); j < 2; j++, col++) {
+                    //cout << iLetters;
                     *(*(boardPtr + row) + col) = iLetters[j];						                    
                 }
 
             }else{//If piece has a true captured status, it is replaced with empty space on board.
 
                 for (int j = 0, row = colorArr[i].getRow(), col = colorArr[i].getCol(); j < 2; j++, col++) {                    
+                    //cout << emptySquare[j];
                     *(*(boardPtr + row) + col) = emptySquare[j];
                 }
 
             }
-
+            
     }
 }
 
@@ -1221,20 +1224,20 @@ bool checkIn(char letter, int number){
 bool obstructd(Ply move, Piece whitArr[], Piece blckArr[], int pIndex){
     bool obstructed = false; 
 
-    Piece *pDataM; 	//Stores information of piece being moved
-    Piece *pDataWh; 	//Store information of white piece iterated 
-    Piece *pDataBl; 	//Store information of black piece iterated 
+    Piece pDataM; 	//Stores information of piece being moved
+    Piece pDataWh; 	//Store information of white piece iterated 
+    Piece pDataBl; 	//Store information of black piece iterated 
 
     //does the obstruction check for white pieces
     if(move.player == "white"){
-            *pDataM = whitArr[pIndex];	//this is the moving piece
+            pDataM = whitArr[pIndex];	//this is the moving piece
             for(int i = 0; i < 16; i++){
-                    *pDataWh = whitArr[i];   //this is the iterated piece 
+                    pDataWh = whitArr[i];   //this is the iterated piece 
 
                     if(i == pIndex){
                             continue; //Skip iteration that would compare moving piece with itself
                     }
-                    if((move.dRow == pDataWh->getRow()) && (move.dCol == pDataWh->getCol())){
+                    if((move.dRow == pDataWh.getRow()) && (move.dCol == pDataWh.getCol())){
                             obstructed = true;
                     }
             } 
@@ -1242,21 +1245,21 @@ bool obstructd(Ply move, Piece whitArr[], Piece blckArr[], int pIndex){
 
     //does the obstruction check for black pieces
     if(move.player == "black"){
-            *pDataM = blckArr[pIndex];	//this is the moving piece
+            pDataM = blckArr[pIndex];	//this is the moving piece
             for(int i = 0; i < 16; i++){
-                    *pDataBl = blckArr[i];  //this is the iterated piece 
+                    pDataBl = blckArr[i];  //this is the iterated piece 
 
                     if(i == pIndex){
                             continue; //Skip iteration that would compare moving piece with itself
                     }
-                    if((move.dRow == pDataBl->getRow()) && (move.dCol == pDataBl->getCol())){
+                    if((move.dRow == pDataBl.getRow()) && (move.dCol == pDataBl.getCol())){
                             obstructed = true;
                     }
             } 
     }
 
 
-    delete pDataBl, pDataM, pDataWh; //unalocate the mem used for the 3 piece pointers created above
+    //delete pDataBl, pDataM, pDataWh; //unalocate the mem used for the 3 piece pointers created above
 
     return obstructed; //true if obstruction exists, false if it doesn't 
 }
@@ -1268,17 +1271,17 @@ bool obstructd(Ply move, Piece whitArr[], Piece blckArr[], int pIndex){
 //to true. By doing this, the piece is not displayed on the board anymore. 
 void capture(Ply move, Piece whitArr[], Piece blckArr[], int pIndex){
     
-    Piece *pDataM; 	//Stores information of piece being moved
-    Piece *pDataWh; 	//Store information of white piece iterated 
-    Piece *pDataBl; 	//Store information of black piece iterated 
+    Piece pDataM; 	//Stores information of piece being moved
+    Piece pDataWh; 	//Store information of white piece iterated 
+    Piece pDataBl; 	//Store information of black piece iterated 
 
     //does the capture check for white pieces
     if(move.player == "white"){
-            *pDataM = whitArr[pIndex];	//this is the moving piece (White)
+            pDataM = whitArr[pIndex];	//this is the moving piece (White)
             for(int i = 0; i < 16; i++){
-                    *pDataBl = blckArr[i];   //this is the iterated piece (Black)
+                    pDataBl = blckArr[i];   //this is the iterated piece (Black)
        
-                    if((move.dRow == pDataBl->getRow()) && (move.dCol == pDataBl->getCol())){
+                    if((move.dRow == pDataBl.getRow()) && (move.dCol == pDataBl.getCol())){
                         blckArr[i].setCap(true); //capture status modified 
                         //blckArr[i].col = 0 ;
                         //blckArr[i].row = 0 ;
@@ -1289,11 +1292,11 @@ void capture(Ply move, Piece whitArr[], Piece blckArr[], int pIndex){
 
     //does the capture check for black pieces
     if(move.player == "black"){
-            *pDataM = blckArr[pIndex];	//this is the moving piece (Black)
+            pDataM = blckArr[pIndex];	//this is the moving piece (Black)
             for(int i = 0; i < 16; i++){
-                    *pDataWh = whitArr[i];   //this is the iterated piece (White)
+                    pDataWh = whitArr[i];   //this is the iterated piece (White)
        
-                    if((move.dRow == pDataWh->getRow()) && (move.dCol == pDataWh->getCol())){
+                    if((move.dRow == pDataWh.getRow()) && (move.dCol == pDataWh.getCol())){
                         whitArr[i].setCap(true); //capture status modified 
                         //whitArr[i].setRow(0);
                         //whitArr[i].setCol(0);
@@ -1303,7 +1306,7 @@ void capture(Ply move, Piece whitArr[], Piece blckArr[], int pIndex){
     }
     
     
-    delete pDataBl, pDataM, pDataWh; //free the mem used for the 3 piece pointers created above
+    //delete pDataBl, pDataM, pDataWh; //free the mem used for the 3 piece pointers created above
     
     return;
 }

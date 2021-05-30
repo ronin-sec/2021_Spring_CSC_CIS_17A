@@ -6,9 +6,24 @@
 using namespace std; 
 
 //**************************************************************
-// The constructor accepts arguments for all member variables. *
+// Constructors for the Piece class.                           *
 //**************************************************************
 
+//Default Constructor, creates Piece with member variable values that are 
+//meat to be replaced with proper values
+Piece::Piece(){
+    name = "";
+    letters = "";
+    value = 0;
+    captured = false;
+    row = 0;
+    col = 0;
+    color = "";
+    firstT = false;
+}
+
+//Parameterized Constructor of this feller, creates a Piece object with the 
+//specified member variable values
 Piece::Piece(string n, string l, int v, bool cap, int r, int c, string colr, bool fT){
     n = name;
     l = letters;
@@ -16,13 +31,12 @@ Piece::Piece(string n, string l, int v, bool cap, int r, int c, string colr, boo
     cap = captured;
     r = row;
     c = col;
-    colr = colr;
+    colr = color;
     fT = firstT;
-    
 }
 
 //****************************************************************
-// Accessor functions for member variables of the Piece class    *
+// Mutator functions for member variables of the Piece class     *
 //****************************************************************
 //Set name
 void Piece::setName(string na){
@@ -61,7 +75,7 @@ void Piece::setFT(bool cap){
 
 
 //****************************************************************
-// Mutator functions for member variables of the Piece class.    *
+// Accessor functions for member variables of the Piece class.    *
 //****************************************************************
 //Get name
 string Piece::getName() const{

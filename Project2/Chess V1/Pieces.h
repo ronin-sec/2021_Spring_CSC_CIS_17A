@@ -18,8 +18,14 @@ class Piece {
         bool firstT;             //check if this is piece's first turn, used for pawns only, currently 
     
     public:            
-        //Constructor
+        //Constructors
+        //Default
+        Piece();
+        //Parameterized
         Piece(std::string, std::string, int, bool, int, int, std::string, bool); 
+        
+        
+        //Destructor
         
         //Accessor Functions (setters)
         void setName(std::string);
