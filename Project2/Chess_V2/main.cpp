@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <string>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -1446,4 +1447,9 @@ void displayCaps(Ply move, Piece whitArr[], Piece blckArr[], vector<string> &wCa
     }        
     
     return;
+}
+
+//Function to write the current piece arrays to a file
+void writeToFile(string filename, ios::openmode mode){
+    
 }

@@ -36,6 +36,31 @@ Piece::Piece(string n, string l, int v, bool cap, int r, int c, string colr, boo
     this -> firstT = fT;
 }
 
+//Dynamically parameterized constructor which takes pointers of all member
+//variables 
+Piece::Piece(std::string *n, std::string *l , int *v, bool *cap, int *r, int *c, std::string *colr, bool *fT){
+    n = new string;
+    l = new string;
+    v = new int;
+    cap = new bool;
+    r = new int;
+    c = new int;
+    colr = new string;
+    fT = new bool;
+};
+
+//Destructor, used for piece objects that are declared with dynamic members 
+Piece::~Piece(){
+    delete name;
+    delete letters;
+    delete value;
+    delete captured;
+    delete row;
+    delete col;
+    delete color;
+    delete firstT;
+};
+
 //****************************************************************
 // Mutator functions for member variables of the Piece class     *
 //****************************************************************

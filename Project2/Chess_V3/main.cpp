@@ -16,6 +16,7 @@ using namespace std;
 
 //User Libraries
 #include "Pieces.h"
+#include "SaveData.h"
 
 //Constant Expressions 
 constexpr auto W_CH = char(0x58); //White char
@@ -48,7 +49,7 @@ bool bishopLogic(Ply,Piece[],Piece[],int);          //Checks that move is legal 
 bool towerLogic(Ply,Piece[],Piece[],int);           //Checks that move is legal for tower
 bool queenLogic(Ply,Piece[],Piece[],int);           //Checks that move is legal for queen pieces 
 bool kingLogic(Ply,Piece[],Piece[],int);            //Checks that move is legal for king pieces 
-bool checkIn(char, int);                            //Validates user input during getPLy function
+bool checkIn(char, int, int&);                            //Validates user input during getPLy function
 bool obstructd(Ply,Piece[],Piece[],int);            //Check for obstructing pieces in a move
 void capture  (Ply,Piece[],Piece[],int);            //sets the captured value for a piece when needed
 void displayCaps(Ply, Piece[], Piece[], vector<string>&, vector<string>&);
@@ -150,49 +151,73 @@ int main()
         //Loop contains main game logic
 	bool cMate = false; //if no check mate detected...
 	do
-	{
-		//use function to make the board 
-		board = makeBoard_V2(BW, BH, whiteArr, blackArr);
-		
-		//display 2d board arr	
-		prntBoard_V2(board, BW, BH);
+	{       if(exitCode != 100){
+                    //use function to make the board 
+                    board = makeBoard_V2(BW, BH, whiteArr, blackArr);
 
-		//check who's turn it is
-		turnCheck(turnCount, player);
+                    //display 2d board arr	
+                    prntBoard_V2(board, BW, BH);
 
-		if(player == "white"){
-			cout << "White's Turn. \n";                
-		}else{
-			cout << "Black's Turn: \n";
-		}
+                    //check who's turn it is
+                    turnCheck(turnCount, player);
 
-                //display current capture information if applicable
-                displayCaps(moveData, whiteArr, blackArr, whiteCaps, blackCaps);
-                
-		//get the corresponding ply data
-		moveData = getPly(player);                             
+                    //display the option to leave game
+                    int exitCode = 0;
+                    displayLeave();
 
-		//check if move is legal
-		while(legalM(moveData, whiteArr, blackArr) != true){
-			cout << "Your move selection is not legal!\n" << endl;
-			moveData = getPly(player);
-		}
-			
-		//"move" the piece by updating it's coordinate values in struct array
-		movePiece(moveData, blackArr, whiteArr);
-		
-                /*
-                //Loop to test the value of all captured members in structure array
-                for(int i = 0; i < 16; i++) {
-                    if(blackArr[i].captured == true){ //change to whiteArr if needed
-                        cout << "Piece #" << i << " = True" << endl;
+                    if(player == "white"){
+                            cout << "White's Turn. \n";                
                     }else{
-                        cout << "Piece #" << i << " = False" << endl;
+                            cout << "Black's Turn: \n";
                     }
+
+                    //display current capture information if applicable
+                    displayCaps(moveData, whiteArr, blackArr, whiteCaps, blackCaps);                                
+
+                    //get the corresponding ply data
+                    moveData = getPly(player);                             
+
+                    //check if move is legal
+                    while(legalM(moveData, whiteArr, blackArr) != true){
+                            cout << "Your move selection is not legal!\n" << endl;
+                            moveData = getPly(player);
+                    }
+
+                    //"move" the piece by updating it's coordinate values in struct array
+                    movePiece(moveData, blackArr, whiteArr);
+
+                    /*
+                    //Loop to test the value of all captured members in structure array
+                    for(int i = 0; i < 16; i++) {
+                        if(blackArr[i].captured == true){ //change to whiteArr if needed
+                            cout << "Piece #" << i << " = True" << endl;
+                        }else{
+                            cout << "Piece #" << i << " = False" << endl;
+                        }
+                    }
+                    */
+
+                    clearScreen();
+                }else{
+                    cout << "Would you like to save the game? " << endl;
+                    string saveDec  = getSaveDec();
+                    
+                    if(saveDec == "yes"){
+                        
+                        //create a save game data object
+                        
+                        //call savegame function which creates files with the data
+                        
+                        cout << "Your game has been saved!" << endl; 
+                                                                                                
+                        
+                    }else{
+                        
+                        cMate == true; 
+                    }
+                    
                 }
-                */
-                
-		clearScreen();
+                    
 	
 	} while (cMate != true);
 	
@@ -367,44 +392,8 @@ void writeLetters(char** boardPtr, Piece whitArr[], Piece blckArr[]){
 	writePiece_v3(boardPtr, whitArr);
 }
 
-/*
-//Used in writeLetters, this is where the pieces are modified depending on capture status
-void writePiece_v2(char** boardPtr, Piece colorArr[]) {
-
-    char emptySquare[] = "   ";
-    
-    //there are 16 pieces of each color 
-    //iterate color array to write each piece on the board based on its members 
-    for (int i = 0; i < 16; i++) {
-            string letters = colorArr[i].getLetters();
-            int letterSize = letters.length();
-            char iLetters[letterSize];
-            
-            for(int x = 0; x < letterSize; x++){
-                iLetters[x] = letters[x]; 
-            }
-            
-            if(colorArr[i].getCap() == false){ //If piece has not been  captured, write to board normally 
-
-                for (int j = 0, row = colorArr[i].getRow(), col = colorArr[i].getCol(); j < 2; j++, col++) {
-                    //cout << iLetters;                    
-                    //*(*(boardPtr + row) + col) = iLetters[j];						                    
-                    boardPtr[row][col] = emptySquare[j];
-                }
-
-            }else{//If piece has a true captured status, it is replaced with empty space on board.
-
-                for (int j = 0, row = colorArr[i].getRow(), col = colorArr[i].getCol(); j < 2; j++, col++) {                    
-                    //cout << emptySquare[j];
-                    //*(*(boardPtr + row) + col) = emptySquare[j];
-                    boardPtr[row][col] = emptySquare[j];
-                }
-
-            }
-            
-    }
-}*/
-
+//Re-written version of the write piece that is able to work with 
+//the piece class
 void writePiece_v3(char** boardPtr, Piece colorArr[]) {
     char emptySquare[] = "   ";
     
@@ -1267,8 +1256,13 @@ bool kingLogic(Ply move, Piece whitArr[], Piece blckArr[], int pIndex){
 
 //Check input for piece selection and destination, used in get ply function
 // This function does input validation
-bool checkIn(char letter, int number){
+bool checkIn(char letter, int number, int &exitCode){
 	bool valid;
+        if(letter == 'x' || letter == 'X'){
+                valid = true;
+                exitCode = 100;
+        }
+        
 	//Validates letter input for column selection 
 	if(letter < 'A' || letter > 'H'){
 		valid = false;
@@ -1446,4 +1440,33 @@ void displayCaps(Ply move, Piece whitArr[], Piece blckArr[], vector<string> &wCa
     }        
     
     return;
+}
+
+//create a save-game data object for a particular piece color
+SaveData createSave(string name, Piece colorArr[]){
+    SaveData arrayInfo = SaveData(name, colorArr[]);
+    
+}
+
+//Used to create a save-game file which holds the current game data
+void saveGame( SaveData dataObject, string fileName, fstream stream){
+    
+    fstream stream(fileName, ios::out | ios::binary);
+    
+     
+    
+}
+
+//
+void displayLeave (){
+    cout << "Enter 'X' or 'x' at anytime to exit the game. "<< endl;       
+}
+
+//
+string getSaveDec(){
+    string decision;
+    
+    cin >> decision;
+    
+    return decision;
 }

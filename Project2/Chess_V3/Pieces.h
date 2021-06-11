@@ -23,9 +23,11 @@ class Piece {
         Piece();
         //Parameterized
         Piece(std::string, std::string, int, bool, int, int, std::string, bool);
-
+        //Dynamic Parameterized
+        Piece(std::string *, std::string *, int *, bool *, int *, int *, std::string *, bool *);
 
         //Destructor
+        ~Piece();
 
         //Accessor Functions (setters)
         void setName(std::string);
@@ -35,7 +37,7 @@ class Piece {
         void setCoords(int, int); //(row, col)
         void setColor(std::string);
         void setFT(bool);
-
+        
         //Mutator Functions (getters)
         std::string getName() ;
         std::string getLetters() ;
@@ -45,6 +47,12 @@ class Piece {
         int getCol() ;
         std::string getColor() ;
         bool getFT() ;
+       
+        /*
+        bool getFT(){
+            return firstT;
+        };
+        */
 };
 
 //Structure storing move information contained in member variables seen below
